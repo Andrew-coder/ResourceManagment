@@ -29,5 +29,7 @@ namespace RegistryManagmentV2.Models
         {
             return new ApplicationDbContext();
         }
+
+        public virtual DbSet<Resource> Resources { get; set;  }
     }
 }
