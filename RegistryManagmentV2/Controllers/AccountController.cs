@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RegistryManagmentV2.Models;
+using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
 {
@@ -17,15 +18,18 @@ namespace RegistryManagmentV2.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IUserService _userService;
 
         public AccountController()
         {
+            _userService = new UserService();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _userService = new UserService();
         }
 
         public ApplicationSignInManager SignInManager
@@ -68,14 +72,20 @@ namespace RegistryManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
+            var user = _userService.LoginUser(model.Email, model.Password);
+            if (user != null)
             {
-                return View(model);
+                var cookie = new HttpCookie("Login", model.Email)
+                {
+                    Expires = DateTime.Now.AddMinutes(10)
+                };
+                Response.SetCookie(cookie);
+                return RedirectToAction("Index", "Home");
             }
+            ModelState.AddModelError("loginFailed", "Не вийшло ввійти в систему");
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
+                shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -83,10 +93,11 @@ namespace RegistryManagmentV2.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
                     return View(model);
             }
         }
@@ -392,6 +403,12 @@ namespace RegistryManagmentV2.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            var cookie = Response.Cookies["Login"];
+            if (cookie != null)
+            {
+                cookie.Value = string.Empty;
+            }
+
             return RedirectToAction("Index", "Home");
         }
 

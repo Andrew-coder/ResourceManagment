@@ -31,5 +31,6 @@ namespace RegistryManagmentV2.Models
         }
 
         public virtual DbSet<Resource> Resources { get; set;  }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

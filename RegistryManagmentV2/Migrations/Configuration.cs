@@ -1,3 +1,5 @@
+using RegistryManagmentV2.Models;
+
 namespace RegistryManagmentV2.Migrations
 {
     using System;
@@ -26,6 +28,31 @@ namespace RegistryManagmentV2.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            context.Users.AddOrUpdate(
+                new User
+                {
+                    Id = 1,
+                    Email = "test_user@test.com",
+                    Name = "John Doe",
+                    Password = "12345",
+                    UserRole = UserRole.User.ToString()
+                },
+                new User
+                {
+                    Id = 2,
+                    Email = "test_user2@test.com",
+                    Name = "Jim Garham",
+                    Password = "12345",
+                    UserRole = UserRole.User.ToString()
+                },
+                new User
+                {
+                    Id = 3,
+                    Email = "test_user3@test.com",
+                    Name = "Brad Madox",
+                    Password = "12345",
+                    UserRole = UserRole.Admin.ToString()
+                });
         }
     }
 }

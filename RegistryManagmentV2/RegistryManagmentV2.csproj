@@ -196,6 +196,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\dto\LoginViewModel.cs" />
+    <Compile Include="Controllers\dto\RegisterViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
@@ -206,14 +208,29 @@
     <Compile Include="Migrations\201803062125452_AddSortOrder.Designer.cs">
       <DependentUpon>201803062125452_AddSortOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803062232126_AddSortOrder1.cs" />
+    <Compile Include="Migrations\201803062232126_AddSortOrder1.Designer.cs">
+      <DependentUpon>201803062232126_AddSortOrder1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803062253198_AddSortOrder2.cs" />
+    <Compile Include="Migrations\201803062253198_AddSortOrder2.Designer.cs">
+      <DependentUpon>201803062253198_AddSortOrder2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IRepository.cs" />
+    <Compile Include="Models\IUnitOfWork.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Resource.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserRole.cs" />
+    <Compile Include="Models\Domain\Resource.cs" />
+    <Compile Include="Models\Domain\User.cs" />
+    <Compile Include="Models\Domain\UserRole.cs" />
+    <Compile Include="Models\Repository\Repository.cs" />
+    <Compile Include="Models\Repository\UserRepository.cs" />
+    <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +311,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201803062125452_AddSortOrder.resx">
       <DependentUpon>201803062125452_AddSortOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803062232126_AddSortOrder1.resx">
+      <DependentUpon>201803062232126_AddSortOrder1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803062253198_AddSortOrder2.resx">
+      <DependentUpon>201803062253198_AddSortOrder2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
