@@ -6,118 +6,115 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using RegistryManagmentV2.Controllers.Attributes;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
 
 namespace RegistryManagmentV2.Controllers
 {
-    public class ResourceController : Controller
+    public class CatalogController : Controller
     {
-        private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Resource
-        [ClaimsAuthorize(AccountStatus = AccountStatus.Approved)]
+        // GET: Catalog
         public ActionResult Index()
         {
-            var res1 = new Resource { Id = 1, Title = "title1", Description = "descr1", Language = "lang1", Format = "format1" };
-            var res2 = new Resource { Id = 2, Title = "title2", Description = "descr2", Language = "lang2", Format = "format2" };
-            //return View(db.Resources.ToList());
-            return View(new List<Resource> { res1, res2 });
+            var catalogs = db.Catalogs;
+            var resources = db.Resources;
+            return View(db.Catalogs.ToList());
         }
 
-        // GET: Resource/Details/5
+        // GET: Catalog/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resource resource = _db.Resources.Find(id);
-            if (resource == null)
+            Catalog catalog = db.Catalogs.Find(id);
+            if (catalog == null)
             {
                 return HttpNotFound();
             }
-            return View(resource);
+            return View(catalog);
         }
 
-        // GET: Resource/Create
+        // GET: Catalog/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Resource/Create
+        // POST: Catalog/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id")] Resource resource)
+        public ActionResult Create([Bind(Include = "Id,Name")] Catalog catalog)
         {
             if (ModelState.IsValid)
             {
-                _db.Resources.Add(resource);
-                _db.SaveChanges();
+                db.Catalogs.Add(catalog);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(resource);
+            return View(catalog);
         }
 
-        // GET: Resource/Edit/5
+        // GET: Catalog/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resource resource = _db.Resources.Find(id);
-            if (resource == null)
+            Catalog catalog = db.Catalogs.Find(id);
+            if (catalog == null)
             {
                 return HttpNotFound();
             }
-            return View(resource);
+            return View(catalog);
         }
 
-        // POST: Resource/Edit/5
+        // POST: Catalog/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id")] Resource resource)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Catalog catalog)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(resource).State = EntityState.Modified;
-                _db.SaveChanges();
+                db.Entry(catalog).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(resource);
+            return View(catalog);
         }
 
-        // GET: Resource/Delete/5
+        // GET: Catalog/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resource resource = _db.Resources.Find(id);
-            if (resource == null)
+            Catalog catalog = db.Catalogs.Find(id);
+            if (catalog == null)
             {
                 return HttpNotFound();
             }
-            return View(resource);
+            return View(catalog);
         }
 
-        // POST: Resource/Delete/5
+        // POST: Catalog/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Resource resource = _db.Resources.Find(id);
-            _db.Resources.Remove(resource);
-            _db.SaveChanges();
+            Catalog catalog = db.Catalogs.Find(id);
+            db.Catalogs.Remove(catalog);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -125,7 +122,7 @@ namespace RegistryManagmentV2.Controllers
         {
             if (disposing)
             {
-                _db.Dispose();
+                db.Dispose();
             }
             base.Dispose(disposing);
         }

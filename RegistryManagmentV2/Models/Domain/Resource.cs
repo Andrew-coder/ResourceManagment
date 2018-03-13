@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RegistryManagmentV2.Models
+namespace RegistryManagmentV2.Models.Domain
 {
     public class Resource
     {
@@ -14,5 +9,8 @@ namespace RegistryManagmentV2.Models
         public string Description { get; set; }
         public string Language { get; set; }
         public string Format { get; set; }
+        [Range (1,3)]
+        public int? Priority { get; set; }
+        public virtual Catalog Catalog { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model RegistryManagmentV2.Models.Domain.Resource
+﻿@model RegistryManagmentV2.Models.Domain.Catalog
 
 @{
     ViewBag.Title = "Details";
@@ -7,9 +7,17 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Resource</h4>
+    <h4>Catalog</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
     </dl>
 </div>
 <p>
