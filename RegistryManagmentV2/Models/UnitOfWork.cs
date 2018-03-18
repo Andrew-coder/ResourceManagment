@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using RegistryManagmentV2.Models.Domain;
-using RegistryManagmentV2.Models.Repository;
+﻿using RegistryManagmentV2.Models.Repository;
 
 namespace RegistryManagmentV2.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private static ApplicationDbContext _context = new ApplicationDbContext();
-
+        private static readonly ApplicationDbContext Context = new ApplicationDbContext();
+        public ResourceRepository ResourceRepository { get; } = new ResourceRepository(Context);
+        public CatalogRepository CatalogRepository { get; } = new CatalogRepository(Context);
+        public UserGroupRepository UserGroupRepository{ get; } = new UserGroupRepository(Context);
         public void Save()
         {
-            _context.SaveChanges();
+            Context.SaveChanges();
         }
     }
 }

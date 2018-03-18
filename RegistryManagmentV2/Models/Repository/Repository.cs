@@ -8,31 +8,32 @@ namespace RegistryManagmentV2.Models.Repository
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        private DbContext _context;
-        public Repository(DbContext context)
+        public ApplicationDbContext Context { get; }
+
+        public Repository(ApplicationDbContext context)
         {
-            _context = context;
+            Context = context;
         }
-        public IQueryable<T> AllEntities => _context.Set<T>();
+        public IQueryable<T> AllEntities => Context.Set<T>();
 
         public T GetById(int id)
         {
-            return _context.Set<T>().Find(id);
+            return Context.Set<T>().Find(id);
         }
 
         public void Add(T item)
         {
-            _context.Set<T>().Add(item);
+            Context.Set<T>().Add(item);
         }
 
         public void Remove(T item)
         {
-            _context.Set<T>().Remove(item);
+            Context.Set<T>().Remove(item);
         }
 
         public void Update(T item)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            Context.Entry(item).State = EntityState.Modified;
         }
     }
 }

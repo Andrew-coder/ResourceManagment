@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace RegistryManagmentV2.Models
 {
@@ -44,6 +45,35 @@ namespace RegistryManagmentV2.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ResourceViewModel
+    {
+        [Required] 
+        [Display(Name = "Назва")] 
+        public string Title { get; set; }
+        
+        [Required] 
+        [Display(Name = "Опис")] 
+        public string Description { get; set; }
+        
+        [Required] 
+        [Display(Name = "Мова")] 
+        public string Language { get; set; }
+        
+        [Required] 
+        [Display(Name = "Формат")] 
+        public string Format { get; set; }
+        
+        [Required]
+        [Display(Name="Файл")]
+        public HttpPostedFileBase ResourceFile { get; set; }
+    
+        [Required]
+        [Display(Name="Розташування файла")]
+        public string ResourceLocation { get; set; }
+
+        public int? CatalogId { get; set; }
     }
 
     public class LoginViewModel

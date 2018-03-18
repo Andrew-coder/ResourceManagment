@@ -1,26 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Security.Claims;
+using System.Threading;
 using System.Web.Mvc;
+using RegistryManagmentV2.Controllers.Attributes;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
+using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
 {
+    [ClaimsAuthorize(AccountStatus = AccountStatus.Approved)]
     public class CatalogController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ICatalogService _catalogService = new CatalogService();
+        private readonly IResourceService _resourceService = new ResourceService();
+
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Catalog
-        public ActionResult Index()
+        public ActionResult Index(long? catalogId)
         {
-            var catalogs = db.Catalogs;
-            var resources = db.Resources;
-            return View(db.Catalogs.ToList());
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            var userGroup = identity.Claims
+                .Where(c => c.Type == "userGroup")
+                .Select(c => c.Value)
+                .SingleOrDefault();
+            List<Catalog> catalogs;
+            List<Resource> resources;
+            if (catalogId == null)
+            {
+                catalogs = _catalogService.GetRootCatalogsForUserGroup(userGroup);
+                resources = _resourceService.GetRootResourcesForUserGroup(userGroup);
+            }
+            else
+            {
+                var id = catalogId ?? default(int);
+                catalogs = _catalogService.GetChildCatalogsByUserGroup(id, userGroup);
+                resources = _resourceService.GetChildResourcesByUserGroup(id, userGroup);
+            }
+
+            var tuple = new Tuple<List<Catalog>, List<Resource>>(catalogs, resources);
+            return View(tuple);
         }
 
         // GET: Catalog/Details/5
@@ -36,12 +60,6 @@ namespace RegistryManagmentV2.Controllers
                 return HttpNotFound();
             }
             return View(catalog);
-        }
-
-        // GET: Catalog/Create
-        public ActionResult Create()
-        {
-            return View();
         }
 
         // POST: Catalog/Create

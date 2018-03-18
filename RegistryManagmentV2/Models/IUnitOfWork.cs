@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RegistryManagmentV2.Models.Domain;
+using RegistryManagmentV2.Models.Repository;
 
 namespace RegistryManagmentV2.Models
 {
     public interface IUnitOfWork
     {
-        //IRepository<User> UserRepository { get; }
+        ResourceRepository ResourceRepository { get; }
+        CatalogRepository CatalogRepository { get; }
+        UserGroupRepository UserGroupRepository { get; }
 
         void Save();
     }

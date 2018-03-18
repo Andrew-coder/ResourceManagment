@@ -1,30 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using RegistryManagmentV2.Controllers.Attributes;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
+using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
 {
+    [ClaimsAuthorize(AccountStatus = AccountStatus.Approved)]
     public class ResourceController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
-
-        // GET: Resource
-        [ClaimsAuthorize(AccountStatus = AccountStatus.Approved)]
-        public ActionResult Index()
-        {
-            var res1 = new Resource { Id = 1, Title = "title1", Description = "descr1", Language = "lang1", Format = "format1" };
-            var res2 = new Resource { Id = 2, Title = "title2", Description = "descr2", Language = "lang2", Format = "format2" };
-            //return View(db.Resources.ToList());
-            return View(new List<Resource> { res1, res2 });
-        }
+        private readonly IResourceService _resourceService = new ResourceService();
 
         // GET: Resource/Details/5
         public ActionResult Details(int? id)
@@ -33,7 +22,7 @@ namespace RegistryManagmentV2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resource resource = _db.Resources.Find(id);
+            var resource = _db.Resources.Find(id);
             if (resource == null)
             {
                 return HttpNotFound();
@@ -52,16 +41,23 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id")] Resource resource)
+        public ActionResult Create(ResourceViewModel resourceViewModel)
         {
             if (ModelState.IsValid)
             {
-                _db.Resources.Add(resource);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {    
+                    var catalogId = resourceViewModel.CatalogId ?? default(int);
+                    _resourceService.CreateResource(resourceViewModel, catalogId);
+                    return RedirectToAction("Index", "Catalog");  
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "ERROR:" + ex.Message.ToString();
+                } 
             }
 
-            return View(resource);
+            return View(resourceViewModel);
         }
 
         // GET: Resource/Edit/5
