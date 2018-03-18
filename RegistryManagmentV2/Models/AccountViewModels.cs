@@ -76,6 +76,11 @@ namespace RegistryManagmentV2.Models
         public int? CatalogId { get; set; }
     }
 
+    public class AdvanceSearchViewModel
+    {
+        
+    }
+
     public class LoginViewModel
     {
         [Required]

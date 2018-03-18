@@ -278,9 +278,18 @@
     <Compile Include="Migrations\201803140249162_change_strings_to_nvarchar.Designer.cs">
       <DependentUpon>201803140249162_change_strings_to_nvarchar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803181342449_Extend_resource_entity.cs" />
+    <Compile Include="Migrations\201803181342449_Extend_resource_entity.Designer.cs">
+      <DependentUpon>201803181342449_Extend_resource_entity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803181717329_Migrate_on_independent_association.cs" />
+    <Compile Include="Migrations\201803181717329_Migrate_on_independent_association.Designer.cs">
+      <DependentUpon>201803181717329_Migrate_on_independent_association.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Domain\Catalog.cs" />
+    <Compile Include="Models\Domain\ResourceStatus.cs" />
     <Compile Include="Models\Domain\UserGroup.cs" />
     <Compile Include="Models\Domain\AccountStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -327,6 +336,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Catalog\AdvanceSearch.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -396,6 +406,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803140249162_change_strings_to_nvarchar.resx">
       <DependentUpon>201803140249162_change_strings_to_nvarchar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181342449_Extend_resource_entity.resx">
+      <DependentUpon>201803181342449_Extend_resource_entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181717329_Migrate_on_independent_association.resx">
+      <DependentUpon>201803181717329_Migrate_on_independent_association.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

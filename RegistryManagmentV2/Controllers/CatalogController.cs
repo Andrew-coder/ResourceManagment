@@ -24,23 +24,22 @@ namespace RegistryManagmentV2.Controllers
         // GET: Catalog
         public ActionResult Index(long? catalogId)
         {
-            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-            var userGroup = identity.Claims
-                .Where(c => c.Type == "userGroup")
-                .Select(c => c.Value)
-                .SingleOrDefault();
-            List<Catalog> catalogs;
-            List<Resource> resources;
-            if (catalogId == null)
+            var catalogs = new List<Catalog>();
+            var resources = new List<Resource>();
+            if (User.IsInRole("Admin"))
             {
-                catalogs = _catalogService.GetRootCatalogsForUserGroup(userGroup);
-                resources = _resourceService.GetRootResourcesForUserGroup(userGroup);
+                catalogs = _catalogService.GetAllCatalogs(catalogId);
+                resources = _resourceService.GetAllResources(catalogId);
             }
             else
             {
-                var id = catalogId ?? default(int);
-                catalogs = _catalogService.GetChildCatalogsByUserGroup(id, userGroup);
-                resources = _resourceService.GetChildResourcesByUserGroup(id, userGroup);
+                var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+                var userGroup = identity.Claims
+                    .Where(c => c.Type == "userGroup")
+                    .Select(c => c.Value)
+                    .SingleOrDefault();
+                catalogs = _catalogService.GetChildCatalogsByUserGroup(catalogId, userGroup);
+                resources = _resourceService.GetChildResourcesByUserGroup(catalogId, userGroup);   
             }
 
             var tuple = new Tuple<List<Catalog>, List<Resource>>(catalogs, resources);

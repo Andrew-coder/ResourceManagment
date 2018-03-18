@@ -19,7 +19,11 @@ namespace RegistryManagmentV2.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             userIdentity.AddClaim(new Claim("accountStatus", AccountStatus.ToString()));
-            userIdentity.AddClaim(new Claim("userGroup", UserGroup.Name));
+            if (UserGroup != null)
+            {
+                userIdentity.AddClaim(new Claim("userGroup", UserGroup.Name));
+            }
+
             return userIdentity;
         }
     }

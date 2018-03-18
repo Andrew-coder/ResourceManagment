@@ -80,7 +80,11 @@ namespace RegistryManagmentV2.Controllers
                     ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user,
                         DefaultAuthenticationTypes.ApplicationCookie);
                     claim.AddClaim(new Claim("accountStatus", user.AccountStatus.ToString()));
-                    claim.AddClaim(new Claim("userGroup", user.UserGroup.Name));
+                    if (user.UserGroup != null)
+                    {
+                        claim.AddClaim(new Claim("userGroup", user.UserGroup.Name));
+                    }
+
                     AuthenticationManager.SignOut();
                     AuthenticationManager.SignIn(new AuthenticationProperties
                     {

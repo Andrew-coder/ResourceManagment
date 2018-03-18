@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace RegistryManagmentV2.Models
 {
@@ -11,7 +7,7 @@ namespace RegistryManagmentV2.Models
         void Add(T item);
         void Remove(T item);
         void Update(T item);
-        T GetById(int id);
+        T GetById(long id);
 
         IQueryable<T> AllEntities { get; }
     }

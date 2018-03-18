@@ -6,7 +6,7 @@ namespace RegistryManagmentV2.Models.Domain
 {
     public class UserGroup
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         [StringLength(30)]
         [Index]
         [Column(TypeName = "NVARCHAR")]

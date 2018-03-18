@@ -6,8 +6,11 @@ namespace RegistryManagmentV2.Services
 {
     public interface IResourceService
     {
-        List<Resource> GetRootResourcesForUserGroup(string groupName);
-        List<Resource> GetChildResourcesByUserGroup(long catalogId, string userGroup);
-        void CreateResource(ResourceViewModel resourceViewModel, int catalogId);
+        List<Resource> GetAllResources(long? catalogId);
+        List<Resource> GetRootResourcesForUserGroup();
+        List<Resource> GetChildResourcesByUserGroup(long? catalogId, string userGroup);
+        void CreateResource(ResourceViewModel resourceViewModel, long catalogId);
+        void ApproveResource(long resourceId);
+        void UpdateResource(Resource resource);
     }
 }

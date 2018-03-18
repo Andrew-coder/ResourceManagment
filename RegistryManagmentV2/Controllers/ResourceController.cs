@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.IO;
 using System.Net;
 using System.Web.Mvc;
 using RegistryManagmentV2.Controllers.Attributes;
@@ -61,7 +62,7 @@ namespace RegistryManagmentV2.Controllers
         }
 
         // GET: Resource/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(long? id)
         {
             if (id == null)
             {
@@ -80,13 +81,15 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id")] Resource resource)
+        public ActionResult Edit(Resource resource)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                resource.ResourceStatus = ResourceStatus.PendingForEditApprove;
+            }
             if (ModelState.IsValid)
             {
-                _db.Entry(resource).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                _resourceService.UpdateResource(resource);
             }
             return View(resource);
         }
@@ -111,10 +114,10 @@ namespace RegistryManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Resource resource = _db.Resources.Find(id);
+            var resource = _db.Resources.Find(id);
             _db.Resources.Remove(resource);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Catalog");
         }
 
         protected override void Dispose(bool disposing)
@@ -124,6 +127,12 @@ namespace RegistryManagmentV2.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ViewResourceDocument(string fileName)
+        {
+            System.Diagnostics.Process.Start(fileName);
+            return RedirectToAction("Index", "Catalog");
         }
     }
 }

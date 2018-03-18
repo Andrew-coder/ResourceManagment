@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using RegistryManagmentV2.Models;
-using RegistryManagmentV2.Models.Domain;
+﻿using RegistryManagmentV2.Models;
 
 namespace RegistryManagmentV2.Services
 {

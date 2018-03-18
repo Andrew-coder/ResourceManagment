@@ -27,41 +27,40 @@
         <div class="collapse navbar-collapse js-navbar">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Ресурси", "Index", "Catalog")</li>
-            @if (Request.IsAuthenticated && User.IsInRole("User"))
-            {
-                <li class="dropdown">
-                    <a id="drop1" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Профіль користувача
+                @if (Request.IsAuthenticated && User.IsInRole("User"))
+                {
+                    <li class="dropdown">
+                        <a id="drop1" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Профіль користувача
 
-                    </a>
-                </li>
-            }
-            
-            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-            {
-                <li>@Html.ActionLink("Управління ресурсами", "ManageResources", "Admin")</li>
-                <li>@Html.ActionLink("Управління користувачами", "ManageUsers", "Admin")</li>
-            }
+                        </a>
+                    </li>
+                }
+
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Управління користувачами", "ManageUsers", "Admin")</li>
+                }
 
 
-                @if(!User.Identity.IsAuthenticated) 
+                @if (!User.Identity.IsAuthenticated)
                 {
                     <li class="dropdown">
                         @Html.ActionLink("Логін/Реєстрація", "Login", "Account",
-                            new { @style= "padding:15px 15px;"}, new {@class = "dropdown-toggle" })
+                            new {@style = "padding:15px 15px;"}, new {@class = "dropdown-toggle"})
                     </li>
                 }
-                
+
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="dropdown">
-                    @Html.ActionLink("Вийти", "LogOff", "Account")
+                        @Html.ActionLink("Вийти", "LogOff", "Account")
 
                     </li>
                 }
             </ul>
             
-            <div class="col-sm-3 col-md-3 col-md-offset-4">
+            <div class="col-sm-3 col-md-3 col-md-offset-3">
                 <form class="navbar-form" role="search">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Пошук" name="q">

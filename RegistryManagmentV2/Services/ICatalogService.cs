@@ -5,7 +5,8 @@ namespace RegistryManagmentV2.Services
 {
     public interface ICatalogService
     {
+        List<Catalog> GetAllCatalogs(long? catalogId);
         List<Catalog> GetRootCatalogsForUserGroup(string groupName);
-        List<Catalog> GetChildCatalogsByUserGroup(long catalogId, string userGroup);
+        List<Catalog> GetChildCatalogsByUserGroup(long? catalogId, string userGroup);
     }
 }

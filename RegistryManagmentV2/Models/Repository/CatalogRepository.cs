@@ -23,12 +23,19 @@ namespace RegistryManagmentV2.Models.Repository
                 .Where(catalog => catalogs.Contains(catalog.Id))
                 .ToList();
         }
-
+        
+        public List<Catalog> GetAllChildCatalogs(long catalogId)
+        { 
+            return Context.Catalogs
+                .Where(catalog => catalog.SuperCatalogId == catalogId)
+                .ToList();
+        }
+        
         public List<Catalog> GetChildCatalogsByUserGroup(long catalogId, UserGroup userGroup)
         {
             var catalogs = userGroup.Catalogs.Select(catalog => catalog.Id).ToArray();
             return Context.Catalogs
-                .Where(catalog => catalog.SuperCatalog.Id == catalogId)
+                .Where(catalog => catalog.SuperCatalogId == catalogId)
                 .Where(catalog => catalogs.Contains(catalog.Id))
                 .ToList();
         }

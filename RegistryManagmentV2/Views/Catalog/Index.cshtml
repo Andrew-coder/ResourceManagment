@@ -1,40 +1,33 @@
-﻿@using System.Collections.Immutable
+﻿@using RegistryManagmentV2.Models
 @using RegistryManagmentV2.Models.Domain;
 @model Tuple<List<Catalog>, List<Resource>>
 @{
     ViewBag.Title = "Index";
 }
-<p>
-    @Html.ActionLink("Створити каталог", "Create")
-</p>
-<p>
-    @Html.ActionLink("Створити ресурс", "Create", "Resource", new
-    {
-        catalogId = Request.Params["catalogId"]
-    }, null)
-</p>
 
+<br/>
+@Html.Partial("~/Views/Catalog/AdvanceSearch.cshtml", new AdvanceSearchViewModel())
+<br/>
+
+<a href= @Url.Action("Create") class="d-inline btn btn-info" role="button">Створити каталог</a>
+<a href=@Url.Action("Create", "Resource", new
+         {
+             catalogId = Request.Params["catalogId"]
+         }, null) class="d-inline btn btn-info" role="button">Створити ресурс</a>
+<a href="#" class="d-inline btn btn-danger">Видалити поточний каталог</a>
+<br/>
+<br/>
 @if (Model.Item1.Count > 0)
 {
     <div class="list-group">
     @foreach (var catalog in Model.Item1)
      {
-         @Html.ActionLink(catalog.Name, "Index", new {  
+         @Html.ActionLink(catalog.Name, "Index", "Catalog", new {  
              catalogId = catalog.Id
          },
-         new {@class = "list-group-item" })
+             new {@class = "list-group-item" })
      }
     </div>
 }
-@foreach (var resource in Model.Item2)
-{
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h4 class="card-title">@Html.DisplayFor(modelItem => resource.Title)</h4>
-            <h6 class="card-subtitle mb-2 text-muted">Ресурс</h6>
-            <a href="#" class="card-link">Переглянути</a>
-            <a href="#" class="card-link">Видалити</a>
-        </div>
-    </div>
-}
+@Html.Partial("~/Views/Resource/Index.cshtml",Model.Item2)
 

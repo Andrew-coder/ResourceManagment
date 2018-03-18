@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
 
@@ -23,19 +20,42 @@ namespace RegistryManagmentV2.Services
             _uow = uow;
         }
 
-        public List<Resource> GetRootResourcesForUserGroup(string groupName)
+        public List<Resource> GetAllResources(long? catalogId)
         {
-            var userGroup = _uow.UserGroupRepository.FindUserGroupByName(groupName);
-            return _uow.ResourceRepository.FindRootCatalogs(userGroup);
+            var resources = new List<Resource>();
+            if (catalogId.HasValue)
+            {
+                resources = _uow.ResourceRepository
+                    .AllEntities
+                    .Where(resource => resource.CatalogId == catalogId)
+                    .ToList();
+            }
+            else
+            {
+                resources = _uow.ResourceRepository
+                    .AllEntities
+                    .Where(resource => resource.Catalog == null)
+                    .ToList();
+            }
+            return resources;
         }
 
-        public List<Resource> GetChildResourcesByUserGroup(long catalogId, string groupName)
+        public List<Resource> GetRootResourcesForUserGroup()
         {
-            var userGroup = _uow.UserGroupRepository.FindUserGroupByName(groupName);
-            return _uow.ResourceRepository.GetChildCatalogsByUserGroup(catalogId, userGroup);
+            return _uow.ResourceRepository.FindRootCatalogs();
         }
 
-        public void CreateResource(ResourceViewModel resourceViewModel, int catalogId)
+        public List<Resource> GetChildResourcesByUserGroup(long? catalogId, string groupName)
+        {
+            if (catalogId.HasValue)
+            {
+                return _uow.ResourceRepository.GetChildCatalogsByUserGroup(catalogId.Value);
+            }
+
+            return GetRootResourcesForUserGroup();
+        }
+
+        public void CreateResource(ResourceViewModel resourceViewModel, long catalogId)
         {
             var file = resourceViewModel.ResourceFile;
             var path = Path.Combine(resourceViewModel.ResourceLocation,  
@@ -48,9 +68,31 @@ namespace RegistryManagmentV2.Services
                 Description = resourceViewModel.Description,
                 Language = resourceViewModel.Language,
                 Format = resourceViewModel.Format,
+                Location = path,
+                ResourceStatus = ResourceStatus.PendingForCreationApprove,
                 Catalog = catalog
             };
             _uow.ResourceRepository.Add(resource);
+            _uow.Save();
+        }
+
+        public void ApproveResource(long resourceId)
+        {
+            var resource =_uow.ResourceRepository.GetById(resourceId);
+            resource.ResourceStatus = ResourceStatus.Approved;
+            _uow.Save();
+        }
+
+        public void UpdateResource(Resource resource)
+        {
+            var resourceToBeUpdated = _uow.ResourceRepository.GetById(resource.Id);
+            resourceToBeUpdated.Title = resource.Title;
+            resourceToBeUpdated.Description = resource.Description;
+            resourceToBeUpdated.Format = resource.Format;
+            resourceToBeUpdated.Language = resource.Language;
+            resourceToBeUpdated.Priority = resource.Priority;
+            resourceToBeUpdated.Location = resource.Location;
+            resourceToBeUpdated.ResourceStatus = resource.ResourceStatus;
             _uow.Save();
         }
     }
