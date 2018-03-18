@@ -12,7 +12,7 @@ namespace RegistryManagmentV2.Models.Repository
 
         public UserGroup FindUserGroupByName(string name)
         {
-            return Context.UserGroups.First(userGroup => userGroup.Name.Equals(name));
+            return Context.UserGroups.FirstOrDefault(userGroup => userGroup.Name.Equals(name));
         }
     }
 }

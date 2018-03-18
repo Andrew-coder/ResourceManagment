@@ -40,6 +40,7 @@
                 @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                 {
                     <li>@Html.ActionLink("Управління користувачами", "ManageUsers", "Admin")</li>
+                    <li>@Html.ActionLink("Групи користувачів", "Index", "UserGroups")</li>
                 }
 
 
