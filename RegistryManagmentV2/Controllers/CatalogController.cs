@@ -123,28 +123,33 @@ namespace RegistryManagmentV2.Controllers
         }
 
         // GET: Catalog/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(long? catalogId)
         {
-            if (id == null)
+            if (catalogId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Catalog catalog = db.Catalogs.Find(id);
+
+            var id = catalogId.GetValueOrDefault();
+            var catalog = db.Catalogs.Find(id);
             if (catalog == null)
             {
                 return HttpNotFound();
             }
-            return View(catalog);
+
+            if (!_catalogService.ContainsSubCatalogs(id))
+            {
+                _catalogService.RemoveCatalog(id);
+            }
+            return RedirectToAction("Index", "Catalog");
         }
 
         // POST: Catalog/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(long id)
         {
-            Catalog catalog = db.Catalogs.Find(id);
-            db.Catalogs.Remove(catalog);
-            db.SaveChanges();
+            _catalogService.RemoveCatalog(id);
             return RedirectToAction("Index");
         }
 

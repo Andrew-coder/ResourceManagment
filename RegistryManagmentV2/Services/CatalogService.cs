@@ -52,9 +52,21 @@ namespace RegistryManagmentV2.Services
             return GetRootCatalogsForUserGroup(groupName);
         }
 
+        public bool ContainsSubCatalogs(long id)
+        {
+            return _uow.CatalogRepository.GetAllChildCatalogs(id).Any();
+        }
+
         public void SaveCatalog(Catalog catalog)
         {
             _uow.CatalogRepository.Add(catalog);
+            _uow.Save();
+        }
+
+        public void RemoveCatalog(long catalogId)
+        {
+            Catalog catalog = _uow.CatalogRepository.GetById(catalogId);
+            _uow.CatalogRepository.Remove(catalog);
             _uow.Save();
         }
     }

@@ -18,7 +18,10 @@
              {
                  catalogId = Request.Params["catalogId"]
              }, null) class="d-inline btn btn-info" role="button">Створити каталог</a>
-    <a href=@Url.Action("Delete") class="d-inline btn btn-danger">Видалити поточний каталог</a>
+    <a href=@Url.Action("Delete", "Catalog", new
+            {
+                catalogId = Request.Params["catalogId"]
+            }, null) class="d-inline btn btn-danger">Видалити поточний каталог</a>
 }
 <br/>
 <br/>
