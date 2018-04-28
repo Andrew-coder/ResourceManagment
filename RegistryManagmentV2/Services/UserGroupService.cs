@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
@@ -24,6 +25,11 @@ namespace RegistryManagmentV2.Services
         public List<UserGroup> GetAllUserGroups()
         {
             return _uow.UserGroupRepository.AllEntities.ToList();
+        }
+
+        public List<UserGroup> GetUserGroupsWithNames(Collection<string> names)
+        {
+            return _uow.UserGroupRepository.AllEntities.Where(group => names.Contains(group.Name)).ToList();
         }
 
         public UserGroup GetUserGroupById(long id)

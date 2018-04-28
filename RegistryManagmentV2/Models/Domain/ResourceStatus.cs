@@ -7,7 +7,7 @@ namespace RegistryManagmentV2.Models.Domain
         [Display(Name = "підтверджений адміном")]
         Approved,
         
-        [Display(Name = "чекає підтвердження на створення")]
+        [Display(Name = "чекає підтвердження на відображення")]
         PendingForCreationApprove,
         
         [Display(Name = "чекає підтвердження на зміну")]

@@ -34,7 +34,7 @@ namespace RegistryManagmentV2.Controllers
             return View("~/Views/Catalog/Index.cshtml", tuple);
         }
 
-        public ActionResult Approve(long id)
+        public ActionResult ApproveResource(long id)
         {
             _resourceService.ApproveResource(id);
             return RedirectToAction("ResourceManagment");

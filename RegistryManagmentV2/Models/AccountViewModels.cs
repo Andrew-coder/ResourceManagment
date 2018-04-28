@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -76,6 +77,16 @@ namespace RegistryManagmentV2.Models
         public int? CatalogId { get; set; }
     }
 
+    public class CatalogViewModel {
+        public int CatalogId { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        [Required]
+        [Display(Name = "Groups")]
+        public string Groups { get; set; }
+    }
+
     public class AdvanceSearchViewModel
     {
         
@@ -99,6 +110,10 @@ namespace RegistryManagmentV2.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Імя")]
+        public string Name { get; set; }
+        
         [Required]
         [EmailAddress]
         [Display(Name = "Емейл")]
@@ -126,12 +141,12 @@ namespace RegistryManagmentV2.Models
         [Required]
         [StringLength(100, ErrorMessage = "Пароль {0} повинен містити хоча б {2} символи.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Підтвердити пароль")]
+        [Compare("Password", ErrorMessage = "Обидва паролі повинні співпадати")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

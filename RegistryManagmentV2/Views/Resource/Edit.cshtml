@@ -93,11 +93,11 @@
                 {
                     if (Model.ResourceStatus != ResourceStatus.Approved)
                     {
-                        <a href=@Url.Action("Approve", "Admin", new {id = Model.Id}) class="d-inline btn btn-info" role="button">Підтвердити</a>
+                        <a href=@Url.Action("ApproveResource", "Admin", new {id = Model.Id}) class="d-inline btn btn-info" role="button">Підтвердити</a>
                     }
                     else
                     {
-                        <a href=@Url.Action("Approve", "Admin", new {id = Model.Id}) class="d-inline btn alert-info disabled" role="button">Підтвердити</a>
+                        <a href=@Url.Action("ApproveResource", "Admin", new {id = Model.Id}) class="d-inline btn alert-info disabled" role="button">Підтвердити</a>
                     }
                     <a href="#" class="d-inline btn btn-danger">Видалити ресурс</a>
                 }

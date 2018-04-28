@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RegistryManagmentV2.Models;
+using RegistryManagmentV2.Models.Domain;
 using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
@@ -159,7 +160,7 @@ namespace RegistryManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Name, Email = model.Email, AccountStatus = AccountStatus.PendingApproval};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

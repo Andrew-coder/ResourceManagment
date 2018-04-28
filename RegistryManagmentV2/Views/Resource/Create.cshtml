@@ -4,8 +4,7 @@
     ViewBag.Title = "Створити ресурс";
 }
 
-<h2>Створити</h2>
-@Html.Raw(Request.Params["catalogId"])
+<h2>Зареєструвати</h2>
 
 @using (Html.BeginForm("Create", "Resource", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {

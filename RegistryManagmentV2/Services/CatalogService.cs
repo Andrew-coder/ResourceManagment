@@ -51,5 +51,11 @@ namespace RegistryManagmentV2.Services
             }
             return GetRootCatalogsForUserGroup(groupName);
         }
+
+        public void SaveCatalog(Catalog catalog)
+        {
+            _uow.CatalogRepository.Add(catalog);
+            _uow.Save();
+        }
     }
 }

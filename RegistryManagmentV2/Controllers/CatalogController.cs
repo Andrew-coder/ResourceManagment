@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -18,7 +19,7 @@ namespace RegistryManagmentV2.Controllers
     {
         private readonly ICatalogService _catalogService = new CatalogService();
         private readonly IResourceService _resourceService = new ResourceService();
-
+        private readonly IUserGroupService _userGroupService = new UserGroupService();
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Catalog
@@ -60,22 +61,34 @@ namespace RegistryManagmentV2.Controllers
             }
             return View(catalog);
         }
+        
+        // GET: Catalog/Create
+        public ActionResult Create(int? id)
+        {
+            var userGroups = _userGroupService.GetAllUserGroups();
+            var tuple = new Tuple<CatalogViewModel, List<UserGroup>>(new CatalogViewModel(), userGroups);
+            return View(tuple);
+        }
 
         // POST: Catalog/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Catalog catalog)
+        public ActionResult Create(CatalogViewModel catalogViewModel)
         {
+            
+            var catalog = new Catalog();
+            catalog.SuperCatalogId = catalogViewModel.CatalogId;
+            catalog.Name = catalogViewModel.Name;
+            catalog.UserGroups = _userGroupService.GetUserGroupsWithNames(new Collection<string>(catalogViewModel.Groups.Split(',')));
             if (ModelState.IsValid)
             {
-                db.Catalogs.Add(catalog);
-                db.SaveChanges();
+                _catalogService.SaveCatalog(catalog);
                 return RedirectToAction("Index");
             }
 
-            return View(catalog);
+            return View(catalogViewModel);
         }
 
         // GET: Catalog/Edit/5

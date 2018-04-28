@@ -8,13 +8,18 @@
 <br/>
 @Html.Partial("~/Views/Catalog/AdvanceSearch.cshtml", new AdvanceSearchViewModel())
 <br/>
-
-<a href= @Url.Action("Create") class="d-inline btn btn-info" role="button">Створити каталог</a>
+<a href="#" class="d-inline btn btn-info disabled" role="button">Назад</a>
 <a href=@Url.Action("Create", "Resource", new
-         {
-             catalogId = Request.Params["catalogId"]
-         }, null) class="d-inline btn btn-info" role="button">Створити ресурс</a>
-<a href="#" class="d-inline btn btn-danger">Видалити поточний каталог</a>
+        {
+            catalogId = Request.Params["catalogId"]
+        }, null) class="d-inline btn btn-info" role="button">Створити ресурс</a>
+@if (User.IsInRole("Admin")) {
+    <a href= @Url.Action("Create", "Catalog", new
+             {
+                 catalogId = Request.Params["catalogId"]
+             }, null) class="d-inline btn btn-info" role="button">Створити каталог</a>
+    <a href=@Url.Action("Delete") class="d-inline btn btn-danger">Видалити поточний каталог</a>
+}
 <br/>
 <br/>
 @if (Model.Item1.Count > 0)

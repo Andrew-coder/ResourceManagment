@@ -6,6 +6,7 @@ using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserGroupsController : Controller
     {
         private readonly IUserGroupService _userGroupService = new UserGroupService();
@@ -76,5 +77,10 @@ namespace RegistryManagmentV2.Controllers
             _userGroupService.DeleteUserGroup(id);
             return RedirectToAction("Index");
         }
+
+        /*protected override void Dispose(bool disposing)
+        {
+            base.Dispose();
+        }*/
     }
 }
