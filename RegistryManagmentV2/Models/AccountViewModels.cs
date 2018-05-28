@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
@@ -75,6 +76,9 @@ namespace RegistryManagmentV2.Models
         public string ResourceLocation { get; set; }
 
         public int? CatalogId { get; set; }
+
+        [Display(Name = "Теги")]
+        public virtual string Tags { get; set; }
     }
 
     public class CatalogViewModel {

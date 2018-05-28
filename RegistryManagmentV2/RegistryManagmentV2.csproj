@@ -307,10 +307,15 @@
     <Compile Include="Migrations\201803182247066_Fix_usergroup_name_index.Designer.cs">
       <DependentUpon>201803182247066_Fix_usergroup_name_index.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805011403041_add_tagging_capability.cs" />
+    <Compile Include="Migrations\201805011403041_add_tagging_capability.Designer.cs">
+      <DependentUpon>201805011403041_add_tagging_capability.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Domain\Catalog.cs" />
     <Compile Include="Models\Domain\ResourceStatus.cs" />
+    <Compile Include="Models\Domain\Tag.cs" />
     <Compile Include="Models\Domain\UserGroup.cs" />
     <Compile Include="Models\Domain\AccountStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -322,15 +327,18 @@
     <Compile Include="Models\Repository\CatalogRepository.cs" />
     <Compile Include="Models\Repository\Repository.cs" />
     <Compile Include="Models\Repository\ResourceRepository.cs" />
+    <Compile Include="Models\Repository\TagRepository.cs" />
     <Compile Include="Models\Repository\UserGroupRepository.cs" />
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CatalogService.cs" />
     <Compile Include="Services\ICatalogService.cs" />
     <Compile Include="Services\IResourceService.cs" />
+    <Compile Include="Services\ITagService.cs" />
     <Compile Include="Services\IUserGroupService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\ResourceService.cs" />
+    <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\UserGroupService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Startup.cs" />
@@ -451,6 +459,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803182247066_Fix_usergroup_name_index.resx">
       <DependentUpon>201803182247066_Fix_usergroup_name_index.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805011403041_add_tagging_capability.resx">
+      <DependentUpon>201805011403041_add_tagging_capability.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

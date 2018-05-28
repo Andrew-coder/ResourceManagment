@@ -20,5 +20,6 @@ namespace RegistryManagmentV2.Models.Domain
         public long? CatalogId { get; set; }
         [ForeignKey("CatalogId")]
         public virtual Catalog Catalog { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

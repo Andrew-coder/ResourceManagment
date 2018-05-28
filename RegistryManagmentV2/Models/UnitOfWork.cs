@@ -8,6 +8,7 @@ namespace RegistryManagmentV2.Models
         public ResourceRepository ResourceRepository { get; } = new ResourceRepository(Context);
         public CatalogRepository CatalogRepository { get; } = new CatalogRepository(Context);
         public UserGroupRepository UserGroupRepository{ get; } = new UserGroupRepository(Context);
+        public TagRepository TagRepository { get; } = new TagRepository(Context);
         public void Save()
         {
             Context.SaveChanges();

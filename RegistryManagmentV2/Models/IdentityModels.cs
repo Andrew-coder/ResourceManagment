@@ -43,5 +43,6 @@ namespace RegistryManagmentV2.Models
         public virtual DbSet<Resource> Resources { get; set;  }
         public virtual DbSet<Catalog> Catalogs { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
     }
 }

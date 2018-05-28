@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -24,6 +25,11 @@ namespace RegistryManagmentV2.Models.Repository
         public void Add(T item)
         {
             Context.Set<T>().Add(item);
+        }
+
+        public void AddOrUpdate(T item)
+        {
+            Context.Set<T>().AddOrUpdate(item);
         }
 
         public void Remove(T item)

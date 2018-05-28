@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using RegistryManagmentV2.Models;
@@ -9,15 +10,18 @@ namespace RegistryManagmentV2.Services
     public class ResourceService : IResourceService
     {
         private readonly IUnitOfWork _uow;
+        private readonly ITagService _tagService;
 
         public ResourceService()
         {
             _uow = new UnitOfWork();
+            _tagService = new TagService(_uow);
         }
 
         public ResourceService(IUnitOfWork uow)
         {
             _uow = uow;
+            _tagService = new TagService();
         }
 
         public List<Resource> GetAllResources(long? catalogId)
@@ -62,6 +66,8 @@ namespace RegistryManagmentV2.Services
                 Path.GetFileName(file.FileName));  
             file.SaveAs(path);
             var catalog = _uow.CatalogRepository.GetById(catalogId);
+            var tagNames = new Collection<string>(resourceViewModel.Tags.Split(','));
+            var tags = _tagService.GetTagsWithNames(tagNames);
             var resource = new Resource
             {
                 Title = resourceViewModel.Title,
@@ -69,6 +75,7 @@ namespace RegistryManagmentV2.Services
                 Language = resourceViewModel.Language,
                 Format = resourceViewModel.Format,
                 Location = path,
+                Tags = tags,
                 ResourceStatus = ResourceStatus.PendingForCreationApprove,
                 Catalog = catalog
             };

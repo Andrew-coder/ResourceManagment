@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Створити ресурс";
+    <link href="~/Content/selectize.css" rel="stylesheet" />
+    <link href="~/Content/selectize.default.css" rel="stylesheet" />
+    @*<link href="~/Content/selectize.bootstrap3.css" rel="stylesheet" />*@
 }
 
 <h2>Зареєструвати</h2>
@@ -9,7 +12,7 @@
 @using (Html.BeginForm("Create", "Resource", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>ресурс</h4>
         <hr />
@@ -17,10 +20,10 @@
         <div class="form-group">
             @Html.HiddenFor(model => model.CatalogId, new { Value = Request.Params["catalogId"] })
 
-            @Html.LabelFor(model => model.Title, htmlAttributes: new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Title, "", new {@class = "text-danger"})
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -56,10 +59,18 @@
         </div>
 
         <div class="form-group">
+            @*<label>Введіть теги для ресурсу</label>*@
+            @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                <input id="select-with-type" name="Tags" />
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.ValidationMessageFor(model => model.ResourceFile)
             <input type="file" name="ResourceFile">
         </div>
-        
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Створити" class="btn btn-default" />
@@ -74,4 +85,24 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/selectize.jquery.js"></script>
+    <script src="~/Scripts/selectize.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            @*let groups = @Html.Raw(Json.Encode(@Model.Item2.Select(group => group.Name)));
+            groups.forEach((group, i) => groups[i] = { "value": group, "name": group});
+            console.log(groups);*@
+            $("#select-with-type").selectize({
+                delimiter: ',',
+                persist: false,
+                placeholder: "Введіть теги",
+                create: input => {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                }
+            });
+        });
+    </script>
 }
