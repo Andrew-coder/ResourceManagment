@@ -91,9 +91,9 @@ namespace RegistryManagmentV2.Models
         public string Groups { get; set; }
     }
 
-    public class AdvanceSearchViewModel
+    public class SearchViewModel
     {
-        
+        public string Tags { get; set; }
     }
 
     public class LoginViewModel

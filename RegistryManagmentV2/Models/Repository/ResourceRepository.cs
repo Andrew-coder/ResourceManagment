@@ -28,5 +28,12 @@ namespace RegistryManagmentV2.Models.Repository
                 .Where(resource => resource.ResourceStatus == ResourceStatus.Approved)
                 .ToList();
         }
+
+        public IList<Resource> GetResourcesByTagsOrderedByPriority(IList<string> tags)
+        {
+            return Context.Resources
+                .Where(resource => resource.Tags.Select(res => res.TagValue).Intersect(tags).Any())
+                .OrderBy(resource => resource.Priority).ToList();
+        }
     }
 }
