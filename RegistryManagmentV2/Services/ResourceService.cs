@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic.ApplicationServices;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
+using WebGrease.Css.Extensions;
 
 namespace RegistryManagmentV2.Services
 {
@@ -59,6 +61,11 @@ namespace RegistryManagmentV2.Services
             return GetRootResourcesForUserGroup();
         }
 
+        public Resource GetById(long id)
+        {
+            return _uow.ResourceRepository.GetById(id);
+        }
+
         public void CreateResource(ResourceViewModel resourceViewModel, long catalogId)
         {
             var file = resourceViewModel.ResourceFile;
@@ -66,6 +73,7 @@ namespace RegistryManagmentV2.Services
                 Path.GetFileName(file.FileName));  
             file.SaveAs(path);
             var catalog = _uow.CatalogRepository.GetById(catalogId);
+            var priority = resourceViewModel.Priority ?? 0;
             var tagNames = new Collection<string>(resourceViewModel.Tags.Split(','));
             var tags = _tagService.GetTagsWithNames(tagNames);
             var resource = new Resource
@@ -75,6 +83,7 @@ namespace RegistryManagmentV2.Services
                 Language = resourceViewModel.Language,
                 Format = resourceViewModel.Format,
                 Location = path,
+                Priority = priority,
                 Tags = tags,
                 ResourceStatus = ResourceStatus.PendingForCreationApprove,
                 Catalog = catalog
@@ -90,16 +99,16 @@ namespace RegistryManagmentV2.Services
             _uow.Save();
         }
 
-        public void UpdateResource(Resource resource)
+        public void UpdateResource(UpdateResourceViewModel resourceViewModel, Resource resource)
         {
-            var resourceToBeUpdated = _uow.ResourceRepository.GetById(resource.Id);
-            resourceToBeUpdated.Title = resource.Title;
-            resourceToBeUpdated.Description = resource.Description;
-            resourceToBeUpdated.Format = resource.Format;
-            resourceToBeUpdated.Language = resource.Language;
-            resourceToBeUpdated.Priority = resource.Priority;
-            resourceToBeUpdated.Location = resource.Location;
-            resourceToBeUpdated.ResourceStatus = resource.ResourceStatus;
+            resource.Title = resourceViewModel.Title;
+            resource.Description = resourceViewModel.Description;
+            resource.Format = resourceViewModel.Format;
+            resource.Language = resourceViewModel.Language;
+            resource.Priority = resourceViewModel.Priority;
+            var tagNames = new Collection<string>(resourceViewModel.Tags.Split(','));
+            var tags = _tagService.GetTagsWithNames(tagNames);
+            tags.Except(resource.Tags).ForEach(tag => resource.Tags.Add(tag));
             _uow.Save();
         }
     }

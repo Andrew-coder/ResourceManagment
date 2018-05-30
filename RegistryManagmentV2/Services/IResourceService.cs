@@ -9,8 +9,9 @@ namespace RegistryManagmentV2.Services
         List<Resource> GetAllResources(long? catalogId);
         List<Resource> GetRootResourcesForUserGroup();
         List<Resource> GetChildResourcesByUserGroup(long? catalogId, string userGroup);
+        Resource GetById(long id);
         void CreateResource(ResourceViewModel resourceViewModel, long catalogId);
         void ApproveResource(long resourceId);
-        void UpdateResource(Resource resource);
+        void UpdateResource(UpdateResourceViewModel resourceViewModel, Resource resource);
     }
 }

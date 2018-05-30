@@ -51,6 +51,7 @@ namespace RegistryManagmentV2.Models
 
     public class ResourceViewModel
     {
+        public int? Id { get; set; }
         [Required] 
         [Display(Name = "Назва")] 
         public string Title { get; set; }
@@ -74,6 +75,40 @@ namespace RegistryManagmentV2.Models
         [Required]
         [Display(Name="Розташування файла")]
         public string ResourceLocation { get; set; }
+
+        [Display(Name = "Пріоритет")]
+        public int? Priority { get; set; }
+
+        public int? CatalogId { get; set; }
+
+        [Display(Name = "Теги")]
+        public virtual string Tags { get; set; }
+    }
+
+    public class UpdateResourceViewModel
+    {
+        public int? Id { get; set; }
+        [Required]
+        [Display(Name = "Назва")]
+        public string Title { get; set; }
+
+        [Required]
+        [Display(Name = "Опис")]
+        public string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Мова")]
+        public string Language { get; set; }
+
+        [Required]
+        [Display(Name = "Формат")]
+        public string Format { get; set; }
+
+        [Display(Name = "Файл")]
+        public HttpPostedFileBase ResourceFile { get; set; }
+
+        [Display(Name = "Пріоритет")]
+        public int? Priority { get; set; }
 
         public int? CatalogId { get; set; }
 

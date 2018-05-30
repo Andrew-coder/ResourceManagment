@@ -81,15 +81,20 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Resource resource)
+        public ActionResult Edit(UpdateResourceViewModel resourceViewModel)
         {
+            var resource = _resourceService.GetById(resourceViewModel.Id.GetValueOrDefault(-1));
+            if (resource == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             if (!User.IsInRole("Admin"))
             {
                 resource.ResourceStatus = ResourceStatus.PendingForEditApprove;
             }
             if (ModelState.IsValid)
             {
-                _resourceService.UpdateResource(resource);
+                _resourceService.UpdateResource(resourceViewModel, resource);
             }
             return View(resource);
         }
