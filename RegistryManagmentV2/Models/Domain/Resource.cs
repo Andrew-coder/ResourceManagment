@@ -12,7 +12,6 @@ namespace RegistryManagmentV2.Models.Domain
         public string Description { get; set; }
         public string Language { get; set; }
         public string Format { get; set; }
-        [Range (1,3)]
         public int? Priority { get; set; }
         public ResourceStatus ResourceStatus { get; set; }
         public string Location { get; set; }

@@ -81,6 +81,7 @@ namespace RegistryManagmentV2.Controllers
             var catalog = new Catalog();
             catalog.SuperCatalogId = catalogViewModel.CatalogId;
             catalog.Name = catalogViewModel.Name;
+            if(!String.IsNullOrEmpty(catalogViewModel.Groups))
             catalog.UserGroups = _userGroupService.GetUserGroupsWithNames(new Collection<string>(catalogViewModel.Groups.Split(',')));
             if (ModelState.IsValid)
             {
