@@ -6,6 +6,6 @@ namespace RegistryManagmentV2.Services
 {
     public interface ISearchService
     {
-        IList<Resource> SearchResourcesByTags(IList<string> tags);
+        IList<Resource> SearchResourcesByTags(IList<string> tags, bool isAdmin);
     }
 }

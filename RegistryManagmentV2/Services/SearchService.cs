@@ -13,9 +13,13 @@ namespace RegistryManagmentV2.Services
             _uow = new UnitOfWork();
         }
 
-        public IList<Resource> SearchResourcesByTags(IList<string> tags)
+        public IList<Resource> SearchResourcesByTags(IList<string> tags, bool isAdmin)
         {
-            return _uow.ResourceRepository.GetResourcesByTagsOrderedByPriority(tags);
+            if (isAdmin)
+            {
+                return _uow.ResourceRepository.GetAllResourcesByTagsOrderedByPriority(tags);
+            }
+            return _uow.ResourceRepository.GetApprovedResourcesByTagsOrderedByPriority(tags);
         }
     }
 }

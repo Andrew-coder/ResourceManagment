@@ -29,11 +29,19 @@ namespace RegistryManagmentV2.Models.Repository
                 .ToList();
         }
 
-        public IList<Resource> GetResourcesByTagsOrderedByPriority(IList<string> tags)
+        public IList<Resource> GetAllResourcesByTagsOrderedByPriority(IList<string> tags)
         {
             return Context.Resources
                 .Where(resource => resource.Tags.Select(res => res.TagValue).Intersect(tags).Any())
-                .OrderBy(resource => resource.Priority).ToList();
+                .OrderByDescending(resource => resource.Priority).ToList();
+        }
+
+        public IList<Resource> GetApprovedResourcesByTagsOrderedByPriority(IList<string> tags)
+        {
+            return Context.Resources
+                .Where(resource => resource.Tags.Select(res => res.TagValue).Intersect(tags).Any())
+                .Where(resource => resource.ResourceStatus == ResourceStatus.Approved)
+                .OrderByDescending(resource => resource.Priority).ToList();
         }
     }
 }
