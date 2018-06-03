@@ -26,10 +26,7 @@ namespace RegistryManagmentV2.Migrations
             //var userManager = IdentityConfig.C
             foreach (UserRole role in Enum.GetValues(typeof(UserRole)))
             {
-                if (roleManager.RoleExists(role.ToString()))
-                {
-                    roleManager.Create(new IdentityRole(role.ToString()));
-                }
+                roleManager.Create(new IdentityRole(role.ToString()));
             }
 
             var password = "123456";
