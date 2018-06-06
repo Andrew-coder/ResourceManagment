@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
 using RegistryManagmentV2.Models.Domain;
 using RegistryManagmentV2.Services;
@@ -22,7 +21,7 @@ namespace RegistryManagmentV2.Controllers
         // GET: UserGroups/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new UserGroup{ SecurityLevel = 5});
         }
 
         // POST: UserGroups/Create
@@ -30,7 +29,7 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] UserGroup userGroup)
+        public ActionResult Create([Bind(Include = "Id,Name,SecurityLevel")] UserGroup userGroup)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +61,7 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] UserGroup userGroup)
+        public ActionResult Edit([Bind(Include = "Id,Name,SecurityLevel")] UserGroup userGroup)
         {
             if (ModelState.IsValid)
             {

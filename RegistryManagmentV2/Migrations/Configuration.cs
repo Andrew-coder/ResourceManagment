@@ -68,9 +68,9 @@ namespace RegistryManagmentV2.Migrations
                 userManager.AddToRole(admin.Id, UserRole.Admin.ToString());
             }
             
-            var parentCatalog = new Catalog() { Id=1, Name = "ректорський контроль", UserGroups = new List<UserGroup> { teachersGroup} };
-            var childCatalog1 = new Catalog() { Id=2, Name = "план", SuperCatalog = parentCatalog, UserGroups = new List<UserGroup> { teachersGroup}};
-            var childCatalog2 = new Catalog() { Id=3, Name = "оцінки", SuperCatalog = parentCatalog, UserGroups = new List<UserGroup> { teachersGroup, assistanceGroup } };
+            var parentCatalog = new Catalog() { Id=1, Name = "ректорський контроль", SecurityLevel = 5, UserGroups = new List<UserGroup> { teachersGroup} };
+            var childCatalog1 = new Catalog() { Id=2, Name = "план", SuperCatalog = parentCatalog, SecurityLevel = 5, UserGroups = new List<UserGroup> { teachersGroup}};
+            var childCatalog2 = new Catalog() { Id=3, Name = "оцінки", SuperCatalog = parentCatalog, SecurityLevel = 5, UserGroups = new List<UserGroup> { teachersGroup, assistanceGroup } };
 
             //teachersGroup.Catalogs = new List<Catalog>{parentCatalog, childCatalog1, childCatalog2};
             //assistanceGroup.Catalogs = new List<Catalog> {childCatalog2};

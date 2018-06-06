@@ -1,6 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@using RegistryManagmentV2.Models.Domain
-@*@model RegistryManagmentV2.Models.Domain.Catalog*@
+﻿@using RegistryManagmentV2.Models.Domain
 @model Tuple<RegistryManagmentV2.Models.CatalogViewModel, List<UserGroup>>
 
 @{
@@ -15,27 +13,36 @@
 
 @using (Html.BeginForm())
 {
+    @Html.HiddenFor(model => model.Item1.Id)
+    @Html.HiddenFor(model => model.Item1.CatalogId, new {id = "Item1_CatalogId", Value = Request.Params["catalogId"] })
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Каталог</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Item1.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Item1.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @*@Html.HiddenFor(model => model.Item1.CatalogId, new { Value = Request.Params["catalogId"] })*@                
-                <input value=@Request.Params["catalogId"] id="Item1_CatalogId" name="CatalogId" type="hidden">
+                @*<input value=@Request.Params["catalogId"] id="Item1_CatalogId" name="CatalogId" type="hidden">*@
                 <input class="form-control text-box single-line" data-val="true" data-val-required="Требуется поле Name." id="catalog.Name" name="Name" type="text" value="">
                 @Html.ValidationMessageFor(model => model.Item1.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Item1.SecurityLevel, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Item1.SecurityLevel, new { htmlAttributes = new { @class = "form-control", min = 1, max = 10 } })
+                @Html.ValidationMessageFor(model => model.Item1.SecurityLevel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>Виберіть користувацькі групи</label>
-            
+
             <div class="col-md-3">
-                <input id="select-with-type" name="Groups"/>
+                <input id="select-with-type" name="Groups" />
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -68,7 +75,7 @@
                 create: input => {
                     return {
                         value: name,
-                        text: name   
+                        text: name
                     }
                 }
             });

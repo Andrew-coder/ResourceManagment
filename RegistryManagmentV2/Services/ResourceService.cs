@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Web.Security;
 using Microsoft.VisualBasic.ApplicationServices;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
@@ -48,7 +49,31 @@ namespace RegistryManagmentV2.Services
 
         public List<Resource> GetRootResourcesForUserGroup()
         {
-            return _uow.ResourceRepository.FindRootCatalogs();
+            return _uow.ResourceRepository.FindApprovedResourcesForRootCatalog();
+        }
+
+        public IList<Resource> GetAllResourcesForCatalogAndUser(long? catalogId, ApplicationUser user, bool isAdmin)
+        {
+            IList<Resource> resources = new List<Resource>();
+            if (catalogId.HasValue)
+            {
+                resources = _uow.ResourceRepository
+                    .GetAllResourcesForCatalog(catalogId.Value);
+            }
+            else
+            {
+                resources = _uow.ResourceRepository.FindAllResourcesForRootCatalog();
+            }
+
+            if (!isAdmin)
+            {
+                var securityLevel = user.UserGroup.SecurityLevel;
+                resources = resources
+                    .Where(resource => resource.SecurityLevel <= securityLevel)
+                    .Where(resource => resource.ResourceStatus == ResourceStatus.Approved)
+                    .ToList();
+            }
+            return resources;
         }
 
         public List<Resource> GetChildResourcesByUserGroup(long? catalogId, string groupName)
@@ -82,6 +107,7 @@ namespace RegistryManagmentV2.Services
                 Description = resourceViewModel.Description,
                 Language = resourceViewModel.Language,
                 Format = resourceViewModel.Format,
+                SecurityLevel = resourceViewModel.SecurityLevel,
                 Location = path,
                 Priority = priority,
                 Tags = tags,
@@ -104,6 +130,7 @@ namespace RegistryManagmentV2.Services
             resource.Title = resourceViewModel.Title;
             resource.Description = resourceViewModel.Description;
             resource.Format = resourceViewModel.Format;
+            resource.SecurityLevel = resourceViewModel.SecurityLevel;
             resource.Language = resourceViewModel.Language;
             resource.Priority = resourceViewModel.Priority;
             var tagNames = new Collection<string>(resourceViewModel.Tags.Split(','));

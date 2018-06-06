@@ -24,13 +24,13 @@ namespace RegistryManagmentV2.Controllers
         // GET: UserManagment
         public ActionResult ResourceManagment(long? catalogId)
         {
-            List<Catalog> catalogs;
-            List<Resource> resources;
+            IList<Catalog> catalogs;
+            IList<Resource> resources;
             
             catalogs = _catalogService.GetAllCatalogs(catalogId);
             resources = _resourceService.GetAllResources(catalogId);
 
-            var tuple = new Tuple<List<Catalog>, List<Resource>>(catalogs, resources);
+            var tuple = new Tuple<IList<Catalog>, IList<Resource>>(catalogs, resources);
             return View("~/Views/Catalog/Index.cshtml", tuple);
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
-using System.IO;
 using System.Net;
 using System.Web.Mvc;
 using RegistryManagmentV2.Controllers.Attributes;
@@ -13,8 +11,10 @@ namespace RegistryManagmentV2.Controllers
     [ClaimsAuthorize(AccountStatus = AccountStatus.Approved)]
     public class ResourceController : Controller
     {
+        private const int DefaultSecurityLevel = 5;
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private readonly IResourceService _resourceService = new ResourceService();
+        private readonly ICatalogService _catalogService = new CatalogService();
 
         // GET: Resource/Details/5
         public ActionResult Details(int? id)
@@ -32,9 +32,15 @@ namespace RegistryManagmentV2.Controllers
         }
 
         // GET: Resource/Create
-        public ActionResult Create()
+        public ActionResult Create(long? catalogId)
         {
-            return View();
+            var catalog = _catalogService.GetById(catalogId.GetValueOrDefault());
+            var securityLevel = DefaultSecurityLevel;
+            if (catalog != null)
+            {
+                securityLevel = catalog.SecurityLevel;
+            }
+            return View(new ResourceViewModel{SecurityLevel = securityLevel});
         }
 
         // POST: Resource/Create

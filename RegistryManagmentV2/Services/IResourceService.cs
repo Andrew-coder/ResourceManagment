@@ -8,6 +8,7 @@ namespace RegistryManagmentV2.Services
     {
         List<Resource> GetAllResources(long? catalogId);
         List<Resource> GetRootResourcesForUserGroup();
+        IList<Resource> GetAllResourcesForCatalogAndUser(long? catalogId, ApplicationUser user, bool isAdmin);
         List<Resource> GetChildResourcesByUserGroup(long? catalogId, string userGroup);
         Resource GetById(long id);
         void CreateResource(ResourceViewModel resourceViewModel, long catalogId);

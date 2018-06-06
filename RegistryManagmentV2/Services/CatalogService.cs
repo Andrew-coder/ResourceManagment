@@ -19,6 +19,11 @@ namespace RegistryManagmentV2.Services
             _uow = uow;
         }
 
+        public Catalog GetById(long id)
+        {
+            return _uow.CatalogRepository.GetById(id);
+        }
+
         public List<Catalog> GetAllCatalogs(long? catalogId)
         {
             var catalogs = new List<Catalog>();

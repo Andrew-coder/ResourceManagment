@@ -57,6 +57,7 @@ namespace RegistryManagmentV2.Services
             }
 
             updatedUserGroup.Name = userGroup.Name;
+            updatedUserGroup.SecurityLevel = userGroup.SecurityLevel;
             _uow.Save();
         }
 

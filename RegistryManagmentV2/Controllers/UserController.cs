@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
@@ -8,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
+using RegistryManagmentV2.Services;
 
 namespace RegistryManagmentV2.Controllers
 {
@@ -17,6 +20,7 @@ namespace RegistryManagmentV2.Controllers
         private readonly ApplicationDbContext _dbContext =  new ApplicationDbContext(); 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IUserGroupService _userGroupService = new UserGroupService();
 
         public UserController()
         {
@@ -97,11 +101,24 @@ namespace RegistryManagmentV2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var applicationUser = UserManager.FindById(id);
+            var userGroups = _userGroupService.GetAllUserGroups();
             if (applicationUser == null)
             {
                 return HttpNotFound();
             }
-            return View(applicationUser);
+
+            var userViewModel = new ApplicationUserViewModel()
+            {
+                Id = applicationUser.Id,
+                Email = applicationUser.Email,
+                PhoneNumber = applicationUser.PhoneNumber,
+                AccessFailedCount = applicationUser.AccessFailedCount,
+                AccountStatus = applicationUser.AccountStatus.ToString(),
+                UserName = applicationUser.UserName,
+                UserGroup = applicationUser.UserGroup.Name
+            };
+            var userInfo = new Tuple<ApplicationUserViewModel, List<UserGroup>>(userViewModel, userGroups);
+            return View(userInfo);
         }
 
         // POST: User/Edit/5
@@ -109,18 +126,21 @@ namespace RegistryManagmentV2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountStatus,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName, UserGroup")] ApplicationUser applicationUser)
+        public ActionResult Edit([Bind(Include = "Id,AccountStatus,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName, UserGroup")] ApplicationUserViewModel applicationUser)
         {
-            if (ModelState.IsValid)
+            var userGroup = _userGroupService.GetUserGroupsWithNames(new Collection<string>() { applicationUser.UserGroup});
+               if (ModelState.IsValid)
             {
                 var user = UserManager.FindById(applicationUser.Id);
-                user.UserGroup = applicationUser.UserGroup;
+                user.UserGroup = userGroup.First();
                 user.Email = applicationUser.Email;
                 user.UserName = applicationUser.UserName;
                 _userManager.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(applicationUser);
+            var userGroups = _userGroupService.GetAllUserGroups();
+            var userInfo = new Tuple<ApplicationUserViewModel, List<UserGroup>>(applicationUser, userGroups);
+            return View(userInfo);
         }
 
         // GET: User/Delete/5

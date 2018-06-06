@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace RegistryManagmentV2.Models
 {
@@ -67,7 +67,12 @@ namespace RegistryManagmentV2.Models
         [Required] 
         [Display(Name = "Формат")] 
         public string Format { get; set; }
-        
+
+        [DefaultValue(5)]
+        [Range(1, 10)]
+        [Display(Name = "Рівень доступу")]
+        public int SecurityLevel { get; set; }
+
         [Required]
         [Display(Name="Файл")]
         public HttpPostedFileBase ResourceFile { get; set; }
@@ -104,6 +109,11 @@ namespace RegistryManagmentV2.Models
         [Display(Name = "Формат")]
         public string Format { get; set; }
 
+        [DefaultValue(5)]
+        [Range(1, 10)]
+        [Display(Name = "Рівень доступу")]
+        public int SecurityLevel { get; set; }
+
         [Display(Name = "Файл")]
         public HttpPostedFileBase ResourceFile { get; set; }
 
@@ -116,12 +126,18 @@ namespace RegistryManagmentV2.Models
         public virtual string Tags { get; set; }
     }
 
-    public class CatalogViewModel {
+    public class CatalogViewModel
+    {
+        [Required]
+        public int Id { get; set; }
         public int? CatalogId { get; set; }
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
-
+        [DefaultValue(5)]
+        [Range(1, 10)]
+        [Display(Name = "Рівень доступу")]
+        public int SecurityLevel { get; set; }
         [Display(Name = "Groups")]
         public string Groups { get; set; }
     }
@@ -197,5 +213,32 @@ namespace RegistryManagmentV2.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ApplicationUserViewModel
+    {
+        public string Id { get; set; }
+
+        [Display(Name = "Статус акаунта")]
+        public string AccountStatus { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Емейл")]
+        public string Email { get; set; }
+
+        [Display(Name = "Номер телефону")]
+        public string PhoneNumber { get; set; }
+
+        [Display(Name = "Кількість невдалих спроб авторизація")]
+        public int AccessFailedCount { get; set; }
+
+        [Required]
+        [Display(Name = "Імя")]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Група")]
+        public string UserGroup { get; set; }
     }
 }

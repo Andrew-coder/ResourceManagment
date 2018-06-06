@@ -322,6 +322,10 @@
     <Compile Include="Migrations\201805011403041_add_tagging_capability.Designer.cs">
       <DependentUpon>201805011403041_add_tagging_capability.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806041658094_add_security_level.cs" />
+    <Compile Include="Migrations\201806041658094_add_security_level.Designer.cs">
+      <DependentUpon>201806041658094_add_security_level.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Domain\Catalog.cs" />
@@ -476,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805011403041_add_tagging_capability.resx">
       <DependentUpon>201805011403041_add_tagging_capability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806041658094_add_security_level.resx">
+      <DependentUpon>201806041658094_add_security_level.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading;
+using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using RegistryManagmentV2.Controllers.Attributes;
 using RegistryManagmentV2.Models;
 using RegistryManagmentV2.Models.Domain;
@@ -21,29 +24,42 @@ namespace RegistryManagmentV2.Controllers
         private readonly IResourceService _resourceService = new ResourceService();
         private readonly IUserGroupService _userGroupService = new UserGroupService();
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+
+
+
+        public ApplicationUserManager UserManager {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         // GET: Catalog
         public ActionResult Index(long? catalogId)
         {
             var catalogs = new List<Catalog>();
-            var resources = new List<Resource>();
-            if (User.IsInRole("Admin"))
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            var user = UserManager.FindById(identity.Identity.GetUserId());
+            var isAdmin = User.IsInRole("Admin");
+            if (isAdmin)
             {
                 catalogs = _catalogService.GetAllCatalogs(catalogId);
-                resources = _resourceService.GetAllResources(catalogId);
             }
             else
             {
-                var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
                 var userGroup = identity.Claims
                     .Where(c => c.Type == "userGroup")
                     .Select(c => c.Value)
                     .SingleOrDefault();
                 catalogs = _catalogService.GetChildCatalogsByUserGroup(catalogId, userGroup);
-                resources = _resourceService.GetChildResourcesByUserGroup(catalogId, userGroup);   
             }
-
-            var tuple = new Tuple<List<Catalog>, List<Resource>>(catalogs, resources);
+            var resources = _resourceService.GetAllResourcesForCatalogAndUser(catalogId, user, isAdmin);
+            var tuple = new Tuple<IList<Catalog>, IList<Resource>>(catalogs, resources);
             return View(tuple);
         }
 
@@ -66,7 +82,7 @@ namespace RegistryManagmentV2.Controllers
         public ActionResult Create(int? id)
         {
             var userGroups = _userGroupService.GetAllUserGroups();
-            var tuple = new Tuple<CatalogViewModel, List<UserGroup>>(new CatalogViewModel(), userGroups);
+            var tuple = new Tuple<CatalogViewModel, List<UserGroup>>(new CatalogViewModel {SecurityLevel = 5}, userGroups);
             return View(tuple);
         }
 
