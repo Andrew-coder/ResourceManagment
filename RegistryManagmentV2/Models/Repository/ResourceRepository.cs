@@ -47,29 +47,13 @@ namespace RegistryManagmentV2.Models.Repository
                 .OrderByDescending(resource => resource.Priority).ToList();
         }
 
-        public IList<Resource> GetApprovedResourcesByTagsOrderedByPriority(IList<string> tags)
+        public IList<Resource> GetApprovedResourcesByTagsAndSecurityLevelOrderedByPriority(IList<string> tags, int securityLevel)
         {
             return Context.Resources
                 .Where(resource => resource.Tags.Select(res => res.TagValue).Intersect(tags).Any())
                 .Where(resource => resource.ResourceStatus == ResourceStatus.Approved)
+                .Where(resource => resource.SecurityLevel <= securityLevel)
                 .OrderByDescending(resource => resource.Priority).ToList();
         }
-
-        //public IList<Resource> GetAllResourcesForCatalogAndSecurityLevel(long catalogId, int securityLevel)
-        //{
-        //    return Context.Resources
-        //        .Where(resource => resource.CatalogId == catalogId)
-        //        .Where(resource => resource.SecurityLevel >= securityLevel)
-        //        .ToList();
-        //}
-
-        //public IList<Resource> GetApprovedResourcesForCatalogAndSecurityLevel(long catalogId, int securityLevel)
-        //{
-        //    return Context.Resources
-        //        .Where(resource => resource.CatalogId == catalogId)
-        //        .Where(resource => resource.ResourceStatus == ResourceStatus.Approved)
-        //        .Where(resource => resource.SecurityLevel >= securityLevel)
-        //        .ToList();
-        //}
     }
 }
